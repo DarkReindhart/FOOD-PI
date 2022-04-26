@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
     score: {
       type: DataTypes.INTEGER
     },
-    healtScore: {
+    healthScore: {
       type: DataTypes.INTEGER
     },
     steps: {
