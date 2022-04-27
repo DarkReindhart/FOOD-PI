@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const imgRegEX = /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gmi;
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
@@ -32,11 +33,7 @@ module.exports = (sequelize) => {
       validate: {
         isURL: true,
         isValidFormat(value){
-          let validate1 = value.split(".")
-          let finalValidator = validate1[validate1.length - 1]
-          const imageTypes = ["jpg", "jpeg", "gif", "png"]
-
-          if(!imageTypes.includes(finalValidator)){
+          if(value.match(imgRegEX) === null){
             throw new Error(' El formato de imagen no es válido.')
           }
         }

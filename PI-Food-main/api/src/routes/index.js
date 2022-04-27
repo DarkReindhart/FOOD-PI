@@ -6,6 +6,7 @@ const { typesInfo, allInfo, idSearch } = require('../controllers')
 // Ejemplo: const authRouter = require('./auth.js');
 
 const router = Router();
+typesInfo();
 
 router.get('/recipes/:idRecipe', async (req, res, next) => {
     const { idRecipe } = req.params
@@ -20,7 +21,7 @@ router.get('/recipes/:idRecipe', async (req, res, next) => {
                 healthScore: recipe.healthScore,
                 steps: recipe.steps,
                 image: recipe.image,
-                dietTypes: recipe.diets?.map(el => el.name)
+                dietTypes: recipe.diets?.map(el => el.name.toLowerCase())
             }
             res.send(recipe)
         }
@@ -56,15 +57,6 @@ router.get('/recipes', async (req, res, next) => {
 
 router.get('/types', async (req, res, next) => {
     try {
-        const dietTypes = await typesInfo()
-        dietTypes.forEach(el => Diet.findOrCreate({
-            where: {
-                name: el
-            },
-            order: [
-                ['id', 'DESC']
-            ]
-        }))
         const allDiets = await Diet.findAll()
         return res.json(allDiets)
     } catch (error) {
@@ -97,11 +89,11 @@ router.post('/recipe', async (req, res, next) => {
                         name: diet
                     }
                 })
-                createRecipe.addDiet(dietType)
+                createRecipe.addDiets(dietType)
                 return res.status(201).send(createRecipe)
             }
             else{
-                return res.send('Recipe already exists in the database')
+                return res.status(302).send('Recipe already exists in the database')
             }   
         }
     } catch (error) {

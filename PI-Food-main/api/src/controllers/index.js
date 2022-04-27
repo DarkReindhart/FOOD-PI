@@ -8,7 +8,14 @@ let typesInfo = async () => {
     const dietType = apiInfo.data.results.map(el => el.diets)
     const uniqueDT = [...new Set(dietType.flat())]
     const allTypes = uniqueDT.concat(["ketogenic", "vegetarian", "lacto vegetarian", "ovo vegetarian", "low fodmap"])
-    return allTypes
+    allTypes.forEach(el => Diet.findOrCreate({
+        where: {
+            name: el.toLowerCase()
+        },
+        order: [
+            ['id', 'DESC']
+        ]
+    }))
 }
 
 const apiInfo = async () => {
@@ -24,13 +31,19 @@ const apiInfo = async () => {
 }
 
 const dbInfo = async () => {
-    return await Recipe.findAll({
+    let algo = await Recipe.findAll({
         include: {
             model: Diet,
             attributes: ['name'],
             through: {
                 attributes: []
             }
+        }
+    })
+    return algo.map(el => {
+        return {
+            ...el.dataValues,
+            dietType: el.diets?.map(el => el.name)
         }
     })
 }
