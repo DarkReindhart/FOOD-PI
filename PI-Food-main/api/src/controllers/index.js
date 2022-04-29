@@ -19,12 +19,15 @@ let typesInfo = async () => {
 }
 
 const apiInfo = async () => {
-    const info = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=10`)
+    const info = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
     const requiredInfo = info.data.results.map(el => {
         return {
+            id: el.id,
             name: el.title,
             image: el.image,
+            score: el.spoonacularScore,
             dietType: el.diets.map(el => el),
+            dishType: el.dishTypes.map(el => el)
         }
     })
     return requiredInfo
@@ -58,6 +61,7 @@ const allInfo = async () => {
 const idSearch = async (id) => {
     let recipe = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}`)
     const recipeInfo = {
+        id: recipe.data.id,
         name: recipe.data.title,
         image: recipe.data.image,
         dishTypes: recipe.data.dishTypes.map(el => el),

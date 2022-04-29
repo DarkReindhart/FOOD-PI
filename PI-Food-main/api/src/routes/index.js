@@ -36,7 +36,6 @@ router.get('/recipes/:idRecipe', async (req, res, next) => {
 router.get('/recipes', async (req, res, next) => {
     const { name } = req.query
     let searchData = await allInfo()
-
     try {
         if (name) {
             let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
