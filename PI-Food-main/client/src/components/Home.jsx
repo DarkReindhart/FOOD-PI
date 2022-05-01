@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Card from './Card'
 import SearchBar from './SearchBar'
 import Pages from './Pages'
+import NavBar from './NavBar/NavBar'
 
 export default function Home() {
 
@@ -28,21 +29,22 @@ export default function Home() {
     dispatch(getDiets())
   }, [dispatch])
 
-  function handleFilterByDiet(e){
+  function handleFilterByDiet(e) {
     dispatch(filterDiets(e.target.value))
+    dispatch(orderBy(ordered))
     setActualPage(1)
   }
 
-  function handleOrderBy(e){
+  function handleOrderBy(e) {
     dispatch(orderBy(e.target.value))
     setOrdered(`${e.target.value}`)
     setActualPage(1)
   }
-  
 
   return (
     <div>
       <h1>Comidas</h1>
+      <NavBar></NavBar>
       <SearchBar></SearchBar>
       <Link to='/createRecipe'>
         <p>Crear Receta</p>
@@ -56,8 +58,8 @@ export default function Home() {
           <option value="descScore">100 to 1</option>
         </select>
         <select onChange={e => handleFilterByDiet(e)}>
-        <option value="" hidden>Por Dieta...</option>
-        <option value="All">Sin Filtrar</option>
+          <option value="" hidden>Por Dieta...</option>
+          <option value="All">Sin Filtrar</option>
           {diets.map(el => <option value={el.name}>{el.name}</option>)}
         </select>
       </div>
@@ -65,7 +67,7 @@ export default function Home() {
         recipesShown && recipesShown.map(el =>
           <Card key={el.id} id={el.id} name={el.name} score={el.score} image={el.image} dietType={el.dietType} dishType={el.dishType} />)
       }
-      <Pages recipesPerPage={recipesPerPage} recipes={recipes.length} pages={pages}/>
+      <Pages recipesPerPage={recipesPerPage} recipes={recipes.length} pages={pages} />
     </div>
   )
 }

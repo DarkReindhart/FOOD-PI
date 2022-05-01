@@ -3,7 +3,7 @@ const initialState = {
     recipes: [],
     recipeDetail: {},
     diets: [],
-    allRecipes: []
+    allRecipes: [],
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -25,20 +25,26 @@ export default function rootReducer(state = initialState, action) {
                 diets: action.payload
             }
         case 'FILTER_DIETS':
-            const allRecipes = state.allRecipes
-            const filteredRecipes = action.payload === 'All' ? allRecipes : allRecipes.filter(el => el.dietType.includes(action.payload))
+            const copyRecipes = state.allRecipes
+            const filteredRecipes = action.payload === 'All' ? copyRecipes : copyRecipes.filter(el => el.dietType.includes(action.payload))
             return {
                 ...state,
-                recipes: filteredRecipes
+                recipes: [...filteredRecipes]
             }
         case 'ORDER_BY':
             let orderedBy = action.payload === "asc" ? state.recipes.sort((a, b) => a.name >= b.name ? 1 : -1) 
             :action.payload === "desc" ? state.recipes.sort((a, b) => a.name >= b.name ? -1 : 1) 
-            :action.payload === "ascScore" ? state.recipes.sort((a, b) =>a.score >= b.score ? 1 : -1) 
-            :state.recipes.sort((a, b) =>a.score >= b.score ? -1 : 1)
+            :action.payload === "ascScore" ? state.recipes.sort((a, b) =>a.score - b.score ) 
+            :state.recipes.sort((a, b) => b.score - a.score)
             return {
                 ...state,
-                recipes: orderedBy
+                recipes: [...orderedBy]
+            }
+        case 'GET_BY_NAME':
+            console.log(action.payload)
+            return {
+                ...state,
+                recipes: action.payload
             }
         default:
             return { ...state }

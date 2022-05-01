@@ -4,6 +4,8 @@ const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL'
 const GET_DIETS = 'GET_DIETS'
 const FILTER_DIETS = 'FILTER_DIETS' 
 const ORDER_BY = 'ORDER_BY'
+const GET_BY_NAME = 'GET_BY_NAME'
+
 
 export function getRecipes(){
     return async function(dispatch){
@@ -49,9 +51,31 @@ export function filterDiets(value){
 }
 
 export function orderBy(value){
-    console.log(value)
     return {
         type:ORDER_BY,
         payload: value
+    }
+}
+
+export function getRecipesByName(name){
+    return async function(dispatch){
+        try {
+            let recipes = await axios.get(`http://localhost:3001/recipes?name=${name}`)
+            return dispatch({type: GET_BY_NAME, payload: recipes.data})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export function createRecipe(recipe){
+    return async function(dispatch){
+        try {
+            const newRecipe = await axios.post(`http://localhost:3001/recipe`, recipe)
+        return newRecipe
+        } catch (error) {
+           console.log(error) 
+        }
+        
     }
 }

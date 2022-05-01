@@ -11,14 +11,15 @@ export default function RecipeDetail(props) {
       dispatch(getRecipeDetail(props.match.params.id))
     }, [dispatch, props.match.params.id])
     
-    console.log(recipeDetail.steps)
+    
   return (
     <div>
       <img src={recipeDetail.image} alt="not found" />
       <p>{recipeDetail.name}</p>
       <p>{recipeDetail.dietType}</p>
       <p>{recipeDetail.dishTypes}</p>
-      {/* <p>{recipeDetail.steps?.map(el => <p>{el.number + el.step}</p>)}</p> */}
+      <p>{typeof recipeDetail.steps === 'string' ? <p>{recipeDetail.steps}</p> :
+      recipeDetail.steps?.map(el => <p>{el.number + el.step}</p>)}</p>
       <p>{recipeDetail.score}</p>
       <p>{recipeDetail.healthScore}</p>
       <p dangerouslySetInnerHTML={{ __html: recipeDetail.summary}}/>
