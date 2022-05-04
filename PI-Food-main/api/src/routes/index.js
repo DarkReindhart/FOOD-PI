@@ -8,6 +8,7 @@ const { typesInfo, allInfo, idSearch } = require('../controllers')
 const router = Router();
 typesInfo();
 
+
 router.get('/recipes/:idRecipe', async (req, res, next) => {
     const { idRecipe } = req.params
     try {
@@ -89,7 +90,7 @@ router.post('/recipe', async (req, res, next) => {
                     }
                 })
                 createRecipe.addDiets(dietType)
-                return res.status(201).send(createRecipe)
+                return res.status(201).send('Recipe created')
             }
             else{
                 return res.status(302).send('Recipe already exists in the database')

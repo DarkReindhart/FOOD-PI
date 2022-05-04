@@ -16,6 +16,7 @@ let typesInfo = async () => {
             ['id', 'DESC']
         ]
     }))
+    return allTypes
 }
 
 const apiInfo = async () => {
@@ -34,7 +35,7 @@ const apiInfo = async () => {
 }
 
 const dbInfo = async () => {
-    let algo = await Recipe.findAll({
+    let created = await Recipe.findAll({
         include: {
             model: Diet,
             attributes: ['name'],
@@ -43,7 +44,7 @@ const dbInfo = async () => {
             }
         }
     })
-    return algo.map(el => {
+    return created.map(el => {
         return {
             ...el.dataValues,
             dietType: el.diets?.map(el => el.name)

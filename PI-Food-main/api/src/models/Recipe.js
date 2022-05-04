@@ -30,6 +30,7 @@ module.exports = (sequelize) => {
     },
     image: {
       type: DataTypes.STRING,
+      defaultValue: "https://theiriejerk.ca/wp-content/uploads/2018/03/no-image.jpg",
       validate: {
         isURL: true,
         isValidFormat(value){
