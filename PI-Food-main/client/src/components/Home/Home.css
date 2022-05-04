@@ -1,0 +1,21 @@
+.align {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.order_filter {
+    margin-top: 1.4em;
+    margin-left: 1em;
+}
+
+.sizes {
+    border-radius: 2em;
+    width: 200px;
+    height:30px;
+    padding-left: 10px;
+    font-size: 16px;
+}
+

@@ -1,9 +1,9 @@
 import './App.css';
 import { Route } from 'react-router-dom'
-import LandingPage from './components/LandingPage';
-import Home from './components/Home';
-import RecipeDetail from './components/RecipeDetail';
-import RecipeCreation from './components/RecipeCreation';
+import LandingPage from './components/LandingPage/LandingPage';
+import Home from './components/Home/Home';
+import RecipeDetail from './components/RecipeDetail/RecipeDetail';
+import RecipeCreation from './components/RecipeCreation/RecipeCreation';
 
 function App() {
   return (

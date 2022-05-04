@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createRecipe, getDiets } from '../actions'
+import { createRecipe, getDiets } from '../../actions'
+import NavBar from '../NavBar/NavBar'
 const onlyLetters = /^[a-zA-Z\s]*$/
+const imgRegEX = /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gmi;
 
 export default function RecipeCreation() {
   const defaultTemplate = {
     name: "",
     summary: "",
+    image: "",
     score: 1,
     healthScore: 1,
     steps: "",
@@ -22,14 +25,18 @@ export default function RecipeCreation() {
   }, [dispatch])
 
   const handleValidateName = (e) => {
-    setTemplate({...template, [e.target.name]: e.target.value})
+    setTemplate({...template, name: e.target.value})
     if (!e.target.value) { setError({ ...error, name: "The name of the dish is required" }) }
     else if (!onlyLetters.test(e.target.value)) { setError({ ...error, name: "Only upper and lower letters are allowed" }) }
     else (setError({ ...error, name: "" }))
-    console.log(error)
+  }
+
+  const handleValidateSummary = (e) => {
+    setTemplate({...template, summary: e.target.value})
+    if (!e.target.value) { setError({ ...error, summary: "The summary of the dish is required" }) }
+    else (setError({ ...error, summary: "" }))
   }
   
-
   const handleChange = (e) => {
     setTemplate({
       ...template,
@@ -54,23 +61,32 @@ export default function RecipeCreation() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    dispatch(createRecipe(template))
+    dispatch(createRecipe({...template, image: template.image || undefined }))
     setTemplate(defaultTemplate)
-  }
 
+  }
 
   return (
     <div>
+      <NavBar></NavBar>
       <h1>Create your Recipe</h1>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div>
         <label>Name*: </label>
-        <input onChange={(e) => handleValidateName(e)} type="text" value={template.name} name='name' />
+        <input maxLength="100" onChange={(e) => handleValidateName(e)} type="text" value={template.name} name='name' />
         {error.name && <p className='danger'>{error.name}</p>}
         </div>
         <div>
         <label>Summary*: </label>
-        <textarea onChange={(e) => handleChange(e)} value= {template.summary} name="summary" cols="50" rows="6"></textarea>
+        <textarea onChange={(e) => handleValidateSummary(e)} value= {template.summary} name="summary" cols="50" rows="6"></textarea>
+        {error.summary && <p className='danger'>{error.summary}</p>}
+        </div>
+        <div>
+          <label>Image: </label>
+          <input title="valid image extension on URL"pattern = {imgRegEX} type="url" placeholder= "https://yourImageLink.com" value={template.image} onChange={(e) => handleChange(e)} name="image"/>
+        </div>
+        <div>
+        {template.image && <img src={template.image} alt="not found" width="120" height="120" />}
         </div>
         <div>
         <label>Score: </label>
@@ -84,7 +100,7 @@ export default function RecipeCreation() {
         </div>
         {diets.map(el => <div key={el.id}><label>{el.name}</label><input checked = {template.diet.includes(el.name)} onChange={(e) => handleCheck(e)} type="checkbox" key={el.name} name={el.name}/></div>)}
         <div>
-          <button type='submit'>Create Recipe</button>
+          <button disabled={Object.values(error).filter(el => el !== "").length || !template.name || !template.summary} type='submit'>Create Recipe</button>
         </div>
       </form>
     </div>

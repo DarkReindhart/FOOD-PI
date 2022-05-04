@@ -1,0 +1,32 @@
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.622);
+    transition: 0.3s;
+    background-color: #F5F5DC;
+    border: 1px solid black;
+    padding: 1em;
+    margin: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 320px;
+    height: 440px;
+    overflow :auto;
+    border-radius: 0.4em;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgb(0, 0, 0);
+    cursor:pointer;
+}
+
+.img {
+    border: 0.5px solid black;
+    object-fit: cover;
+    height: 220px;
+    min-width: 150px;
+    max-width: 300px;
+    border-radius: 0.5em;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+}
