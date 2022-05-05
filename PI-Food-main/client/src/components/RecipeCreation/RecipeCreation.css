@@ -1,0 +1,54 @@
+
+.big_container{
+    padding-bottom: 20px;
+}
+
+.bg {
+    background-color: beige;
+    border: 1px solid black;
+    border-radius: 1em;
+    width: fit-content;
+    margin: auto;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+.elements {
+    margin-bottom: 10px;
+}
+
+.image{
+    object-fit: cover;
+    height: 120px;
+    min-width: 150px;
+    max-width: 300px;
+}
+
+.areas {
+    width: 80%;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
+
+.danger{
+    color: red;
+    font-size: 0.8em;
+}
+
+.justify{
+    display:flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 15px;
+}
+
+.align_diet{
+    width: 170px;
+    align-self: left;
+    text-align: left;
+}
+
+.specificButton { 
+    justify-content: center;
+    cursor:pointer;
+    margin-bottom: 10px;
+}

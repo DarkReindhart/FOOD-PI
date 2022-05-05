@@ -4,7 +4,10 @@ const initialState = {
     recipeDetail: {},
     diets: [],
     allRecipes: [],
-    meFui: false
+    loading: false,
+    algo: false,
+    filtered: "All",
+    ordering: ""
 }
 
 export default function rootReducer(state = initialState, action) {
@@ -14,7 +17,7 @@ export default function rootReducer(state = initialState, action) {
                 ...state,
                 recipes: action.payload,
                 allRecipes: action.payload,
-                meFui: true
+                loading: true
             }
         case 'GET_RECIPE_DETAIL':
             return {
@@ -31,7 +34,8 @@ export default function rootReducer(state = initialState, action) {
             const filteredRecipes = action.payload === 'All' ? copyRecipes : copyRecipes.filter(el => el.dietType.includes(action.payload))
             return {
                 ...state,
-                recipes: [...filteredRecipes]
+                recipes: [...filteredRecipes],
+                filtered: action.payload
             }
         case 'ORDER_BY':
             let orderedBy = action.payload === "asc" ? state.recipes.sort((a, b) => a.name.toLowerCase() >= b.name.toLowerCase() ? 1 : -1) 
@@ -40,12 +44,15 @@ export default function rootReducer(state = initialState, action) {
             :state.recipes.sort((a, b) => b.score - a.score)
             return {
                 ...state,
-                recipes: [...orderedBy]
+                recipes: [...orderedBy],
+                ordering: action.payload
             }
         case 'GET_BY_NAME':
             return {
                 ...state,
-                recipes: action.payload
+                recipes: action.payload,
+                allRecipes: action.payload,
+                algo: true
             }
         case 'RESET_DETAIL':
             return {
@@ -55,7 +62,18 @@ export default function rootReducer(state = initialState, action) {
         case 'LOAD_RECIPES':
             return {
                 ...state,
-                meFui: false
+                loading: false
+            }
+        case 'ALGO':
+            return{
+                ...state,
+                algo:false
+            }
+        case 'RESET_STATES':
+            return {
+                ...state,
+                filtered: 'All',
+                ordering: ""
             }
         default:
             return { ...state }

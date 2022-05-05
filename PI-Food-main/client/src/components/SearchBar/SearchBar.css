@@ -1,18 +1,27 @@
-.searchBar {
-    display: flex;
-    justify-content: flex-start;
-    width: 300px;
-    height:30px;
-    margin-left: 62.7em;
-    margin-top: 12px;
-    
+
+.bar{
+    margin:auto;
 }
 
-.button{
-    border-radius: 0.6em; 
+.find{
+    border-radius: 1em;
+    cursor: pointer;
+    border: none;
+    height: 30px;
+    width: 70px;
+}
+
+.find:hover{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.09) 0 0);
+    font-weight: bold;
 }
 
 .search {
     margin-right: 0.5em;
-    border-radius: 0.6em;
+    border-radius: 1em; 
+    border:none;
+    height: 24px;
+    font-size: medium;
+    padding: 4px 10px;
+    height: auto;
 }

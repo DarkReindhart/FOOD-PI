@@ -1,0 +1,21 @@
+.imagesize {
+    object-fit: cover;
+    height: 220px;
+    min-width: 150px;
+    max-width: 300px;
+    border: 1px solid black;
+}
+
+.detail {
+    background-color: beige;
+    border: 1px solid black;
+    border-radius: 1em;
+    width: fit-content;
+    margin: auto;
+    max-width: 900px;
+    margin-top: 10px;
+}
+
+.paddiv {
+   padding-bottom: 20px; 
+}

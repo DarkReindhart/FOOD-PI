@@ -64,7 +64,7 @@ export function getRecipesByName(name) {
             let recipes = await axios.get(`http://localhost:3001/recipes?name=${name}`)
             return dispatch({ type: GET_BY_NAME, payload: recipes.data })
         } catch (error) {
-            if (error.response.status === 404) {
+            if (error.response?.status === 404) {
                 alert(error.response.data)
             }
             else {
@@ -80,13 +80,13 @@ export function createRecipe(recipe) {
             const newRecipe = await axios.post(`http://localhost:3001/recipe`, recipe)
             return alert(newRecipe.data)
         } catch (error) {
-            if (error.response.status === 500) {
+            if (error.response?.status === 500) {
                 alert(error.response.data)
             }
-            else if (error.response.status === 400) {
+            else if (error.response?.status === 400) {
                 alert(error.response.data)
             }
-            else if (error.response.status === 302) {
+            else if (error.response?.status === 302) {
                 alert(error.response.data)
             }
         }
@@ -100,5 +100,13 @@ export function resetDetail() {
 
 export function loadingRecipes() {
     return {type: LOAD_RECIPES}
+}
+
+export function algo() {
+    return {type: 'ALGO'}
+}
+
+export function resetStates(){
+    return {type: 'RESET_STATES'}
 }
 

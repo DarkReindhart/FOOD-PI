@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { filterDiets, getDiets, getRecipes, loadingRecipes, orderBy } from '../../actions'
+import { filterDiets, getDiets, getRecipes, loadingRecipes, orderBy, resetStates } from '../../actions'
 import Card from '../Card/Card'
 import Pages from '../Pages/Pages'
 import NavBar from '../NavBar/NavBar'
@@ -11,7 +11,9 @@ export default function Home() {
   const dispatch = useDispatch();
   let recipes = useSelector(state => state.recipes)
   let diets = useSelector(state => state.diets)
-  let loading = useSelector(state => state.meFui)
+  let loading = useSelector(state => state.loading)
+  let ordering = useSelector(state => state.ordering)
+  let filtered = useSelector(state => state.filtered)
   const [actualPage, setActualPage] = useState(1)
   const [recipesPerPage, setRecipesPerPage] = useState(9)
   const [ordered, setOrdered] = useState("")
@@ -27,6 +29,10 @@ export default function Home() {
     dispatch(getRecipes())
     dispatch(getDiets())
     return dispatch(loadingRecipes())
+  }, [dispatch])
+
+  useEffect(() => {
+    return dispatch(resetStates())
   }, [dispatch])
 
   function handleFilterByDiet(e) {
@@ -46,7 +52,7 @@ export default function Home() {
       <NavBar></NavBar>
       <div className="align">
         <div className='order_filter'>
-          <select className='sizes' onChange={e => handleOrderBy(e)}>
+          <select value={ordering}className='sizes' onChange={e => handleOrderBy(e)}>
             <option value="" hidden>Order by...</option>
             <option value="asc">A to Z</option>
             <option value="desc">Z to A</option>
@@ -55,7 +61,7 @@ export default function Home() {
           </select>
         </div>
           <div className='order_filter'>
-          <select className='sizes' onChange={e => handleFilterByDiet(e)}>
+          <select value={filtered} className='sizes' onChange={e => handleFilterByDiet(e)}>
             <option value="" hidden>Por Dieta...</option>
             <option value="All">No filters</option>
             {diets.map(el => <option key={el.id} value={el.name}>{el.name}</option>)}
@@ -66,7 +72,7 @@ export default function Home() {
         {
           loading ? recipesShown && recipesShown.map(el =>
             <Card key={el.id} id={el.id} name={el.name} score={el.score} image={el.image} dietType={el.dietType} dishType={el.dishType} />)
-            : <div>Loading...</div>
+            : <div><b>Loading...</b></div>
         }
       </div>
       <Pages recipesPerPage={recipesPerPage} recipes={recipes.length} pages={pages} />
