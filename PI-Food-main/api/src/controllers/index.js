@@ -7,7 +7,7 @@ let typesInfo = async () => {
     const apiInfo = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
     const dietType = apiInfo.data.results.map(el => el.diets)
     const uniqueDT = [...new Set(dietType.flat())]
-    const allTypes = uniqueDT.concat(["ketogenic", "vegetarian", "lacto vegetarian", "ovo vegetarian", "low fodmap"])
+    const allTypes = uniqueDT.concat(["ketogenic", "vegetarian", "low fodmap"])
     allTypes.forEach(el => Diet.findOrCreate({
         where: {
             name: el.toLowerCase()
@@ -21,14 +21,20 @@ let typesInfo = async () => {
 
 const apiInfo = async () => {
     const info = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true&number=100`)
-    const requiredInfo = info.data.results.map(el => {
+    let requiredInfo = info.data.results.map(el => {
+        let diets = el.diets.map(el => el)
+        if(el.vegan && !diets.includes('vegan')) diets.push('vegan')
+        if(el.vegetarian && !diets.includes('vegetarian')) diets.push('vegetarian')
+        if(el.glutenFree && !diets.includes('gluten free')) diets.push('gluten free')
+        if(el.dairyFree && !diets.includes('dairy free')) diets.push('dairy free')
+        if(el.lowFodmap && !diets.includes('low fodmap')) diets.push('low fodmap')
         return {
             id: el.id,
             name: el.title,
             image: el.image,
             score: el.spoonacularScore,
-            dietType: el.diets.map(el => el),
-            dishType: el.dishTypes.map(el => el)
+            dietType: diets,
+            dishType: el.dishTypes.map(el => el),
         }
     })
     return requiredInfo
