@@ -22,7 +22,7 @@ router.get('/recipes/:idRecipe', async (req, res, next) => {
                 healthScore: recipe.healthScore,
                 steps: recipe.steps,
                 image: recipe.image,
-                dietTypes: recipe.diets?.map(el => el.name.toLowerCase())
+                dietType: recipe.diets?.map(el => el.name.toLowerCase())
             }
             res.send(recipe)
         }
