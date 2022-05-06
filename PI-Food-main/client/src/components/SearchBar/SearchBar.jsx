@@ -41,11 +41,15 @@ export default function SearchBar() {
     dispatch(resetStates())
     setName("")
   }
+
+  const handleEnter = (e) => {
+    if(e.code === 'Enter') dispatch(getRecipesByName(name))
+  }
   return (
     atHome && <div className="bar">
-      <input className='search' value = {name} onChange={(e) => handleChange(e)} type="search" placeholder='Search by dish name...' />
+      <input className='search' value = {name} onChange={(e) => handleChange(e)} onKeyPress= {(e) => handleEnter(e)}type="search" placeholder='Search by dish name...' />
       <button className='find' onClick={(e) => handleSubmit(e)} type='button'>Search</button>
-      <button onClick={(e) => handleSubmitClear(e)}>Clear</button>
+      <button className='find' onClick={(e) => handleSubmitClear(e)}>Clear</button>
     </div>
   )
 }

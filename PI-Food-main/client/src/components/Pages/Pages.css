@@ -18,3 +18,9 @@ ul.nav {
   ul.nav > li > button:hover{
     opacity: 0.7;
   }
+
+  .coloredButton {
+    cursor:default;
+    background-color: purple;
+    color: white;
+  }

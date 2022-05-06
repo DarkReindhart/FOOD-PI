@@ -32,6 +32,10 @@ export default function Home() {
   }, [dispatch])
 
   useEffect(() => {
+    setActualPage(1)
+  }, [recipes])
+
+  useEffect(() => {
     return dispatch(resetStates())
   }, [dispatch])
 
@@ -75,7 +79,7 @@ export default function Home() {
             : <div><b>Loading...</b></div>
         }
       </div>
-      <Pages recipesPerPage={recipesPerPage} recipes={recipes.length} pages={pages} />
+      <Pages actualPage={actualPage} recipesPerPage={recipesPerPage} recipes={recipes.length} pages={pages} />
     </div>
   )
 }
