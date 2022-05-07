@@ -23,6 +23,7 @@ export default function Home() {
 
   const pages = (value) => {
     setActualPage(value)
+    window.scrollTo(0,0)
   }
 
   useEffect(() => {

@@ -41,7 +41,7 @@ export default function RecipeCreation() {
 
   const handleValidateImage = (e) => {
     setTemplate({ ...template, image: e.target.value })
-    if (e.target.value.match(imgRegEX) === null) {
+    if (e.target.value !== "" && e.target.value.match(imgRegEX) === null) {
       setError({ ...error, image: 'Invalid image format!' })
     }
     else (setError({ ...error, image: "" }))
@@ -99,7 +99,7 @@ export default function RecipeCreation() {
             <textarea className='areas' onChange={(e) => handleChange(e)} value={template.steps} name="steps" cols="50" rows="6"></textarea>
           </div>
           <div className='elements'>
-            <p><b>Image </b></p>
+            <p><b>Image (URL)</b></p>
             <input className='areas' title="valid image extension on URL" type="text" placeholder="https://yourImageLink.jpg" value={template.image} onChange={(e) => handleValidateImage(e)} name="image" />
           </div>
           <div>

@@ -34,11 +34,6 @@
     text-align: center;
 }
 
-.scores{
-    margin: 70px -150px 20px 28px;
-    
-}
-
 .items{
     margin: 16px 20px;
     line-height: 2em;
@@ -62,7 +57,6 @@ a {
     height: 30px;
     width: 70px;
 }
-
 
 .centerbtn:hover{
     background-image: linear-gradient(rgba(0, 0, 0, 0.09) 0 0);

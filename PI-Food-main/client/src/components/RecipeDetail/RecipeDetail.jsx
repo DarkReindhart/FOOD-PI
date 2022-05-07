@@ -29,11 +29,11 @@ export default function RecipeDetail(props) {
             <div className='detail'>
               <h3 className = 'name'>{recipeDetail.name}</h3>
               <div className='contentAlign'>
-                <div className='scores'>
+                <img className='imagesize' src={recipeDetail.image} alt="not found" />
+              </div>
+              <div className='name'>
               <p><b>Score</b>: {recipeDetail.score} </p>
               <p><b>HealthScore</b>: {recipeDetail.healthScore} </p>
-              </div>
-                <img className='imagesize' src={recipeDetail.image} alt="not found" />
               </div>
               <div>
               <p className ='items' dangerouslySetInnerHTML={{ __html: `<b>Summary</b>: ${recipeDetail.summary}` }} />
