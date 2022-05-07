@@ -5,7 +5,6 @@ const GET_DIETS = 'GET_DIETS'
 const FILTER_DIETS = 'FILTER_DIETS'
 const ORDER_BY = 'ORDER_BY'
 const GET_BY_NAME = 'GET_BY_NAME'
-const RESET_DETAIL = 'RESET_DETAIL'
 const LOAD_RECIPES = 'LOAD_RECIPES'
 
 export function getRecipes() {
@@ -92,10 +91,6 @@ export function createRecipe(recipe) {
         }
 
     }
-}
-
-export function resetDetail() {
-    return { type: RESET_DETAIL }
 }
 
 export function loadingRecipes() {
