@@ -69,7 +69,7 @@ router.post('/recipe', async (req, res, next) => {
 
     try {
         if (!name || !summary) {
-            return res.status(400).send('Name or Sumary are missing')
+            return res.status(400).send('Name or Summary are missing')
         }
         else {
             const [createRecipe, created] = await Recipe.findOrCreate({
