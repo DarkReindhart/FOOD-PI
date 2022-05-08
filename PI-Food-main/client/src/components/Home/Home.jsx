@@ -42,13 +42,13 @@ export default function Home() {
 
   function handleFilterByDiet(e) {
     dispatch(filterDiets(e.target.value))
-    dispatch(orderBy(ordered))
+    dispatch(orderBy(ordered)) //ordena lo filtrado
     setActualPage(1)
   }
 
   function handleOrderBy(e) {
     dispatch(orderBy(e.target.value))
-    setOrdered(`${e.target.value}`)
+    setOrdered(`${e.target.value}`) //guardo ordenamiento apra usarlo en linea 45 dsps de filtrado
     setActualPage(1)
   }
 
