@@ -1,11 +1,13 @@
 const axios = require('axios');
-const GET_RECIPES = 'GET_RECIPES'
-const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL'
-const GET_DIETS = 'GET_DIETS'
-const FILTER_DIETS = 'FILTER_DIETS'
-const ORDER_BY = 'ORDER_BY'
-const GET_BY_NAME = 'GET_BY_NAME'
-const LOAD_RECIPES = 'LOAD_RECIPES'
+export const GET_RECIPES = 'GET_RECIPES'
+export const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL'
+export const GET_DIETS = 'GET_DIETS'
+export const FILTER_DIETS = 'FILTER_DIETS'
+export const ORDER_BY = 'ORDER_BY'
+export const GET_BY_NAME = 'GET_BY_NAME'
+export const LOAD_RECIPES = 'LOAD_RECIPES'
+export const DELETE_RECIPE = 'DELETE_RECIPE'
+export const RESET_STATES = 'RESET_STATES'
 
 export function getRecipes() {
     return async function (dispatch) {
@@ -102,6 +104,21 @@ export function algo() {
 }
 
 export function resetStates(){
-    return {type: 'RESET_STATES'}
+    return {type: RESET_STATES}
 }
+
+export function deleteRecipe(idRecipe){
+    return async function(dispatch){
+        try {
+            const deletedRecipe = await axios.delete(`http://localhost:3001/recipe/${idRecipe}`)
+            return alert(deletedRecipe.data)
+        } catch (error) {
+            if (error.response?.status === 404) {
+                alert(error.response.data)
+            }
+        }
+    }
+}
+
+
 

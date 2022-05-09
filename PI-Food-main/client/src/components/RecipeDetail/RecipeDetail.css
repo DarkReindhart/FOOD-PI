@@ -62,3 +62,8 @@ a {
     background-image: linear-gradient(rgba(0, 0, 0, 0.09) 0 0);
     font-weight: bold;
 }
+
+.message {
+    margin-top: 2em;
+    font-size: 2em;
+}

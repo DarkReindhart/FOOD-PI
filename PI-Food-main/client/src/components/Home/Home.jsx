@@ -42,13 +42,13 @@ export default function Home() {
 
   function handleFilterByDiet(e) {
     dispatch(filterDiets(e.target.value))
-    dispatch(orderBy(ordered)) //ordena lo filtrado
+    dispatch(orderBy(ordered))
     setActualPage(1)
   }
 
   function handleOrderBy(e) {
     dispatch(orderBy(e.target.value))
-    setOrdered(`${e.target.value}`) //guardo ordenamiento apra usarlo en linea 45 dsps de filtrado
+    setOrdered(`${e.target.value}`)
     setActualPage(1)
   }
 
@@ -75,9 +75,10 @@ export default function Home() {
       </div>
       <div className='align'>
         {
-          loading ? recipesShown && recipesShown.map(el =>
+          loading ? recipesShown.length ? recipesShown?.map(el =>
             <Card key={el.id} id={el.id} name={el.name} score={el.score} image={el.image} dietType={el.dietType} dishType={el.dishType} />)
-            : <div><b>Loading...</b></div>
+            : <div className='messages'><b>No recipes found!</b></div>
+            : <div className='messages'><b>Loading...</b></div>
         }
       </div>
       <Pages actualPage={actualPage} recipesPerPage={recipesPerPage} recipes={recipes.length} pages={pages} />
