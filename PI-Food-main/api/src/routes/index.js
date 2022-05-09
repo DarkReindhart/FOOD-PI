@@ -101,6 +101,17 @@ router.post('/recipe', async (req, res, next) => {
     }
 })
 
+router.delete('/recipe/:idRecipe', async(req, res, next) => {
+    try {
+        const { idRecipe } = req.params
+        const deletedRecipe = await Recipe.destroy({where: {id: idRecipe}})
+        if(!deletedRecipe) return res.status(404).send('No recipe with the provided ID to delete')
+        else return res.send('Recipe deleted succesfully')
+    } catch (error) {
+        next(error)
+    }
+})
+
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
