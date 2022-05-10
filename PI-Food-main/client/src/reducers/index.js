@@ -1,12 +1,12 @@
 import { GET_RECIPES, GET_RECIPE_DETAIL, GET_DIETS, FILTER_DIETS, 
-    ORDER_BY, GET_BY_NAME, LOAD_RECIPES, RESET_STATES } from "../actions" 
+    ORDER_BY, GET_BY_NAME, LOAD_RECIPES, RESET_STATES, REMEMBER_SEARCH_FILTER } from "../actions" 
 const initialState = {
     recipes: [],
     recipeDetail: {},
     diets: [],
     allRecipes: [],
     loading: false,
-    algo: false,
+    rememberSearchFilter: false,
     filtered: "All",
     ordering: ""
 }
@@ -53,17 +53,17 @@ export default function rootReducer(state = initialState, action) {
                 ...state,
                 recipes: action.payload,
                 allRecipes: action.payload,
-                algo: true
+                rememberSearchFilter: true
             }
         case LOAD_RECIPES:
             return {
                 ...state,
                 loading: false
             }
-        case 'ALGO':
+        case REMEMBER_SEARCH_FILTER:
             return{
                 ...state,
-                algo:false
+                rememberSearchFilter:false
             }
         case RESET_STATES:
             return {

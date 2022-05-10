@@ -8,6 +8,7 @@ export const GET_BY_NAME = 'GET_BY_NAME'
 export const LOAD_RECIPES = 'LOAD_RECIPES'
 export const DELETE_RECIPE = 'DELETE_RECIPE'
 export const RESET_STATES = 'RESET_STATES'
+export const REMEMBER_SEARCH_FILTER = 'REMEMBER_SEARCH_FILTER'
 
 export function getRecipes() {
     return async function (dispatch) {
@@ -99,8 +100,8 @@ export function loadingRecipes() {
     return {type: LOAD_RECIPES}
 }
 
-export function algo() {
-    return {type: 'ALGO'}
+export function rememberSearchFilter() {
+    return {type: REMEMBER_SEARCH_FILTER}
 }
 
 export function resetStates(){

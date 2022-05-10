@@ -7,7 +7,7 @@ export default function Card({ id, name, image, dietType, dishType }) {
         <NavLink className='link' to={`/recipeDetail/${id}`}>
         <div className='card'>
                 <img src={image} alt="not found" className="img" />
-                <h4>{name}</h4>
+                <h4 >{name}</h4>
                 <div>
                 {
                     dietType?.length ? <p>Diets: {dietType?.join(", ")}</p> :

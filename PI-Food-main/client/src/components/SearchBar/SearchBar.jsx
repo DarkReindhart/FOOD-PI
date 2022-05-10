@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { algo, filterDiets, getRecipesByName, orderBy, resetStates } from '../../actions'
+import { rememberSearchFilter, filterDiets, getRecipesByName, orderBy, resetStates } from '../../actions'
 import './SearchBar.css'
 
 export default function SearchBar() {
@@ -10,7 +10,7 @@ export default function SearchBar() {
   const location = useLocation()
   const atHome = location.pathname === "/home"
   const [name, setName] = useState("")
-  const filterAndSearch = useSelector(state => state.algo)
+  const filterAndSearch = useSelector(state => state.rememberSearchFilter)
   const orderingMemo = useSelector(state => state.ordering)
   const filteredMemo = useSelector(state => state.filtered)
 
@@ -18,7 +18,7 @@ export default function SearchBar() {
     if(filterAndSearch){
       dispatch(orderBy(orderingMemo))
       dispatch(filterDiets(filteredMemo))
-      dispatch(algo())
+      dispatch(rememberSearchFilter())
     }
   },[dispatch, filterAndSearch, orderingMemo, filteredMemo])
 
