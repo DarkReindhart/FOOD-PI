@@ -6,8 +6,14 @@ const { typesInfo, allInfo, idSearch } = require('../controllers')
 // Ejemplo: const authRouter = require('./auth.js');
 
 const router = Router();
-typesInfo();
 
+(async function type(){
+    try {
+        await typesInfo();
+    } catch (error) {
+        console.log('cambiar APIKEY, ', error.message)
+    }
+})()
 
 router.get('/recipes/:idRecipe', async (req, res, next) => {
     const { idRecipe } = req.params
@@ -34,42 +40,67 @@ router.get('/recipes/:idRecipe', async (req, res, next) => {
     }
 })
 
-// router.get('/recipes', async (req, res, next) => {
-//     const { name } = req.query
-
-//     try {
-//         let searchData = await allInfo()
-//         if (name) {
-//             let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
-//             if (filteredData.length) {
-//                 return res.send(filteredData)
-//             }
-//             else {
-//                 return res.status(404).send('No recipes found')
-//             }
-//         }
-//         else {
-//             return res.send(searchData)
-//         }
-//     } catch (error) {
-//         next(error)
+// router.get('/recipes/:idRecipe', (req, res, next) => {
+//     const { idRecipe } = req.params
+//     if (regExUUID.test(idRecipe)) {
+//         Recipe.findByPk(idRecipe, { include: Diet })
+//             .then(recipe => {
+//                 recipe = {
+//                     id: recipe.id,
+//                     name: recipe.name,
+//                     summary: recipe.summary,
+//                     score: recipe.score,
+//                     healthScore: recipe.healthScore,
+//                     steps: recipe.steps,
+//                     image: recipe.image,
+//                     dietType: recipe.diets?.map(el => el.name.toLowerCase())
+//                 }
+//                 res.send(recipe)
+//             })
+//             .catch(error => next(error))
+//     } else {
+//         idSearch(idRecipe)
+//             .then(recipe => res.send(recipe))
+//             .catch(error => next(error))
 //     }
 // })
 
-router.get('/recipes', (req, res, next) => {
+router.get('/recipes', async (req, res, next) => {
     const { name } = req.query
 
-    allInfo()
-        .then(searchData => {
-            if (name) {
-                let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
-                if (filteredData.length) return res.send(filteredData)
-                else return res.status(404).send('No recipes found')
+    try {
+        let searchData = await allInfo()
+        if (name) {
+            let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
+            if (filteredData.length) {
+                return res.send(filteredData)
             }
-            else return res.send(searchData)
-        })
-        .catch(error => next(error))
+            else {
+                return res.status(404).send('No recipes found')
+            }
+        }
+        else {
+            return res.send(searchData)
+        }
+    } catch (error) {
+        next(error)
+    }
 })
+
+// router.get('/recipes', (req, res, next) => {
+//     const { name } = req.query
+
+//     allInfo()
+//         .then(searchData => {
+//             if (name) {
+//                 let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
+//                 if (filteredData.length) return res.send(filteredData)
+//                 else return res.status(404).send('No recipes found')
+//             }
+//             else return res.send(searchData)
+//         })
+//         .catch(error => next(error))
+// })
 
 router.get('/types', async (req, res, next) => {
     try {
@@ -80,63 +111,69 @@ router.get('/types', async (req, res, next) => {
     }
 })
 
-// router.post('/recipe', async (req, res, next) => {
-//     let { name, summary, score, healthScore, steps, diet, image } = req.body
-
-//     try {
-//         if (!name || !summary) {
-//             return res.status(400).send('Name or Summary are missing')
-//         }
-//         else {
-//             const [createRecipe, created] = await Recipe.findOrCreate({
-//                 where: { name },
-//                 defaults: {
-//                     name,
-//                     summary,
-//                     score,
-//                     healthScore,
-//                     steps,
-//                     image
-//                 }
-//             })
-//             if (created) {
-//                 let dietType = await Diet.findAll({
-//                     where: {
-//                         name: diet
-//                     }
-//                 })
-//                 createRecipe.addDiets(dietType)
-//                 return res.status(201).send('Recipe created')
-//             }
-//             else {
-//                 return res.status(302).send('Recipe already exists in the database')
-//             }
-//         }
-//     } catch (error) {
-//         next(error)
-//     }
+// router.get('/types', (req, res, next) => {
+//     Diet.findAll()
+//     .then(allDiets => res.json(allDiets))
+//     .catch(error => next(error))
 // })
 
-router.post('/recipe', (req, res, next) => {
+router.post('/recipe', async (req, res, next) => {
     let { name, summary, score, healthScore, steps, diet, image } = req.body
 
-    if (!name || !summary) {
-        return res.status(400).send('Name or Summary are missing')
-    }
-    else {
-        Recipe.findOrCreate({ where: { name }, defaults: { name, summary, score, healthScore, steps, image } })
-            .then(recipe => {
-                const [createRecipe, created] = recipe
-                if (created) {
-                    return Diet.findAll({ where: { name: diet } })
-                        .then(dietType => createRecipe.addDiets(dietType))
-                        .then(() => res.status(201).send('Recipe created'))
+    try {
+        if (!name || !summary) {
+            return res.status(400).send('Name or Summary are missing')
+        }
+        else {
+            const [createRecipe, created] = await Recipe.findOrCreate({
+                where: { name },
+                defaults: {
+                    name,
+                    summary,
+                    score,
+                    healthScore,
+                    steps,
+                    image
                 }
-                else return res.status(302).send('Recipe already exists in the database')
             })
-            .catch(error => next(error))
+            if (created) {
+                let dietType = await Diet.findAll({
+                    where: {
+                        name: diet
+                    }
+                })
+                createRecipe.addDiets(dietType)
+                return res.status(201).send('Recipe created')
+            }
+            else {
+                return res.status(302).send('Recipe already exists in the database')
+            }
+        }
+    } catch (error) {
+        next(error)
     }
 })
+
+// router.post('/recipe', (req, res, next) => {
+//     let { name, summary, score, healthScore, steps, diet, image } = req.body
+
+//     if (!name || !summary) {
+//         return res.status(400).send('Name or Summary are missing')
+//     }
+//     else {
+//         Recipe.findOrCreate({ where: { name }, defaults: { name, summary, score, healthScore, steps, image } })
+//             .then(recipe => {
+//                 const [createRecipe, created] = recipe
+//                 if (created) {
+//                     return Diet.findAll({ where: { name: diet } })
+//                         .then(dietType => createRecipe.addDiets(dietType))
+//                         .then(() => res.status(201).send('Recipe created'))
+//                 }
+//                 else return res.status(302).send('Recipe already exists in the database')
+//             })
+//             .catch(error => next(error))
+//     }
+// })
 
 router.delete('/recipe/:idRecipe', async (req, res, next) => {
     try {
