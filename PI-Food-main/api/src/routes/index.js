@@ -34,25 +34,41 @@ router.get('/recipes/:idRecipe', async (req, res, next) => {
     }
 })
 
-router.get('/recipes', async (req, res, next) => {
+// router.get('/recipes', async (req, res, next) => {
+//     const { name } = req.query
+
+//     try {
+//         let searchData = await allInfo()
+//         if (name) {
+//             let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
+//             if (filteredData.length) {
+//                 return res.send(filteredData)
+//             }
+//             else {
+//                 return res.status(404).send('No recipes found')
+//             }
+//         }
+//         else {
+//             return res.send(searchData)
+//         }
+//     } catch (error) {
+//         next(error)
+//     }
+// })
+
+router.get('/recipes', (req, res, next) => {
     const { name } = req.query
-    let searchData = await allInfo()
-    try {
-        if (name) {
-            let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
-            if (filteredData.length) {
-                return res.send(filteredData)
+
+    allInfo()
+        .then(searchData => {
+            if (name) {
+                let filteredData = searchData.filter(el => el.name.toLowerCase().includes(name.toLowerCase()))
+                if (filteredData.length) return res.send(filteredData)
+                else return res.status(404).send('No recipes found')
             }
-            else {
-                return res.status(404).send('No recipes found')
-            }
-        }
-        else {
-            return res.send(searchData)
-        }
-    } catch (error) {
-        next(error)
-    }
+            else return res.send(searchData)
+        })
+        .catch(error => next(error))
 })
 
 router.get('/types', async (req, res, next) => {
@@ -64,48 +80,69 @@ router.get('/types', async (req, res, next) => {
     }
 })
 
-router.post('/recipe', async (req, res, next) => {
+// router.post('/recipe', async (req, res, next) => {
+//     let { name, summary, score, healthScore, steps, diet, image } = req.body
+
+//     try {
+//         if (!name || !summary) {
+//             return res.status(400).send('Name or Summary are missing')
+//         }
+//         else {
+//             const [createRecipe, created] = await Recipe.findOrCreate({
+//                 where: { name },
+//                 defaults: {
+//                     name,
+//                     summary,
+//                     score,
+//                     healthScore,
+//                     steps,
+//                     image
+//                 }
+//             })
+//             if (created) {
+//                 let dietType = await Diet.findAll({
+//                     where: {
+//                         name: diet
+//                     }
+//                 })
+//                 createRecipe.addDiets(dietType)
+//                 return res.status(201).send('Recipe created')
+//             }
+//             else {
+//                 return res.status(302).send('Recipe already exists in the database')
+//             }
+//         }
+//     } catch (error) {
+//         next(error)
+//     }
+// })
+
+router.post('/recipe', (req, res, next) => {
     let { name, summary, score, healthScore, steps, diet, image } = req.body
 
-    try {
-        if (!name || !summary) {
-            return res.status(400).send('Name or Summary are missing')
-        }
-        else {
-            const [createRecipe, created] = await Recipe.findOrCreate({
-                where: { name },
-                defaults: {
-                    name,
-                    summary,
-                    score,
-                    healthScore,
-                    steps,
-                    image
+    if (!name || !summary) {
+        return res.status(400).send('Name or Summary are missing')
+    }
+    else {
+        Recipe.findOrCreate({ where: { name }, defaults: { name, summary, score, healthScore, steps, image } })
+            .then(recipe => {
+                const [createRecipe, created] = recipe
+                if (created) {
+                    return Diet.findAll({ where: { name: diet } })
+                        .then(dietType => createRecipe.addDiets(dietType))
+                        .then(() => res.status(201).send('Recipe created'))
                 }
+                else return res.status(302).send('Recipe already exists in the database')
             })
-            if(created){
-                let dietType = await Diet.findAll({
-                    where: {
-                        name: diet
-                    }
-                })
-                createRecipe.addDiets(dietType)
-                return res.status(201).send('Recipe created')
-            }
-            else{
-                return res.status(302).send('Recipe already exists in the database')
-            }   
-        }
-    } catch (error) {
-        next(error)
+            .catch(error => next(error))
     }
 })
 
-router.delete('/recipe/:idRecipe', async(req, res, next) => {
+router.delete('/recipe/:idRecipe', async (req, res, next) => {
     try {
         const { idRecipe } = req.params
-        const deletedRecipe = await Recipe.destroy({where: {id: idRecipe}})
-        if(!deletedRecipe) return res.status(404).send('No recipe with the provided ID to delete')
+        const deletedRecipe = await Recipe.destroy({ where: { id: idRecipe } })
+        if (!deletedRecipe) return res.status(404).send('No recipe with the provided ID to delete')
         else return res.send('Recipe deleted succesfully')
     } catch (error) {
         next(error)
@@ -116,3 +153,5 @@ router.delete('/recipe/:idRecipe', async(req, res, next) => {
 // Ejemplo: router.use('/auth', authRouter);
 
 module.exports = router;
+
+
