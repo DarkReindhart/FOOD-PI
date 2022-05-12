@@ -35,9 +35,6 @@ export default function SearchBar() {
 
   const handleSubmitClear = (e) => {
     e.preventDefault()
-    dispatch(getRecipesByName(""))
-    dispatch(filterDiets("All"))
-    dispatch(orderBy(""))
     dispatch(resetStates())
     setName("")
   }

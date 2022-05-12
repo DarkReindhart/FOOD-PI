@@ -1,6 +1,7 @@
 import { GET_RECIPES, GET_RECIPE_DETAIL, GET_DIETS, FILTER_DIETS, 
     ORDER_BY, GET_BY_NAME, LOAD_RECIPES, RESET_STATES, REMEMBER_SEARCH_FILTER } from "../actions" 
-const initialState = {
+
+    const initialState = {
     recipes: [],
     recipeDetail: {},
     diets: [],
@@ -17,7 +18,7 @@ export default function rootReducer(state = initialState, action) {
             return {
                 ...state,
                 recipes: action.payload,
-                allRecipes: action.payload,
+                allRecipes: [...action.payload],
                 loading: true
             }
         case GET_RECIPE_DETAIL:
@@ -31,8 +32,9 @@ export default function rootReducer(state = initialState, action) {
                 diets: action.payload
             }
         case FILTER_DIETS:
-            const copyRecipes = state.allRecipes
-            const filteredRecipes = action.payload === 'All' ? copyRecipes :copyRecipes.filter(el => el.dietType.includes(action.payload))
+            const copyRecipes = [...state.allRecipes]
+            const filteredRecipes = action.payload === 'All' ? copyRecipes  
+            :copyRecipes.filter(el => el.dietType.includes(action.payload))
             return {
                 ...state,
                 recipes: [...filteredRecipes],
@@ -69,7 +71,8 @@ export default function rootReducer(state = initialState, action) {
             return {
                 ...state,
                 filtered: 'All',
-                ordering: ""
+                ordering: "",
+                recipes: [...state.allRecipes]
             }
         default:
             return { ...state }

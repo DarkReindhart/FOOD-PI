@@ -10,11 +10,17 @@ export default function Pages({recipesPerPage, recipes, pages, actualPage }) {
   return (
     <nav>
         <ul className = 'nav'>
+            <li >
+                <button disabled = {actualPage === 1} onClick = {(e) => pages(actualPage-1)}>{"<"}</button>
+            </li>
             {numberOfPages && numberOfPages.map(el => (
                 <li key={el}>
                     <button className={el === actualPage? 'coloredButton' : ''} onClick={() => pages(el)}>{el}</button>
                 </li>
             ))}
+            <li >
+                <button disabled = {actualPage === numberOfPages.length} onClick = {(e) => pages(actualPage+1)}>{">"}</button>
+            </li>
         </ul>
     </nav>
   )

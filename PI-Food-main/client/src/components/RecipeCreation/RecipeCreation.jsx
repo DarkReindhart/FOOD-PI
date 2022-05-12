@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { createRecipe, getDiets } from '../../actions'
-import NavBar from '../NavBar/NavBar'
 import './RecipeCreation.css'
 const onlyLetters = /^[a-zA-Z\s]*$/
-const imgRegEX = /^http[^\?]*.(jpg|jpeg|gif|png|tiff|bmp)(\?(.*))?$/gmi;
+const imgRegEX = /^http[^]*.(jpg|jpeg|gif|png|tiff|bmp)((.*))?$/gmi;
 
 
 export default function RecipeCreation() {
@@ -78,7 +77,6 @@ export default function RecipeCreation() {
   return (
     <div className='big_container'>
       <div>
-        <NavBar />
       </div>
       <div className='bg'>
         <h1>Create your Recipe</h1>

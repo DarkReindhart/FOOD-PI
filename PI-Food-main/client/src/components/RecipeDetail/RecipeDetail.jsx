@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { deleteRecipe, getRecipeDetail } from '../../actions'
-import NavBar from '../NavBar/NavBar'
 import './RecipeDetail.css'
 const regExUUID = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
 
@@ -33,7 +32,6 @@ export default function RecipeDetail(props) {
 
   return (
     <div className='paddiv'>
-      <NavBar></NavBar>
       {
         recipeDetail.name ?
           <div>

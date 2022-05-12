@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { NavLink, Link, useLocation } from 'react-router-dom'
-import { getRecipes } from '../../actions'
+import { getRecipes, resetStates } from '../../actions'
 import SearchBar from '../SearchBar/SearchBar'
 import "./NavBar.css"
 
@@ -13,6 +13,7 @@ export default function NavBar() {
   const atRecipeDetail = location.pathname.includes("/recipeDetail")
   const handleRefresh = (e) => {
     dispatch(getRecipes())
+    dispatch(resetStates())
   }
   return (
     <div >
@@ -23,9 +24,9 @@ export default function NavBar() {
           </Link>
           </li>
           <li>
-        {atHome ? <div className='title' ><h1>Home</h1></div> : <NavLink className={atHome ? 'title' : 'nothome'} to="/home">
+        <NavLink className={atHome ? 'title' : 'nothome'} to="/home">
           <h1 onClick={(e) => handleRefresh(e)}>Home</h1>
-        </NavLink>}
+        </NavLink>
         </li>
         <li>
           <NavLink className= {atHome ? 'create' : atRecipeDetail ? 'create' : 'createchange'} to='/createRecipe'>

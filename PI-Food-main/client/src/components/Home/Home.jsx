@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { filterDiets, getDiets, getRecipes, loadingRecipes, orderBy, resetStates } from '../../actions'
 import Card from '../Card/Card'
 import Pages from '../Pages/Pages'
-import NavBar from '../NavBar/NavBar'
 import './Home.css'
 
 export default function Home() {
@@ -15,8 +14,7 @@ export default function Home() {
   let ordering = useSelector(state => state.ordering)
   let filtered = useSelector(state => state.filtered)
   const [actualPage, setActualPage] = useState(1)
-  const [recipesPerPage, setRecipesPerPage] = useState(9)
-  const [ordered, setOrdered] = useState("")
+  const recipesPerPage = 9
   const lastRecipe = actualPage * recipesPerPage
   const firstRecipe = lastRecipe - recipesPerPage
   const recipesShown = recipes.slice(firstRecipe, lastRecipe)
@@ -42,19 +40,16 @@ export default function Home() {
 
   function handleFilterByDiet(e) {
     dispatch(filterDiets(e.target.value))
-    dispatch(orderBy(ordered))
-    setActualPage(1)
+    dispatch(orderBy(ordering))
   }
 
   function handleOrderBy(e) {
     dispatch(orderBy(e.target.value))
-    setOrdered(`${e.target.value}`)
-    setActualPage(1)
+    
   }
 
   return (
     <div>
-      <NavBar></NavBar>
       <div className="align">
         <div className='order_filter'>
           <select value={ordering}className='sizes' onChange={e => handleOrderBy(e)}>
@@ -68,7 +63,6 @@ export default function Home() {
           <div className='order_filter'>
           <select value={filtered} className='sizes' onChange={e => handleFilterByDiet(e)}>
             <option value="" hidden>Por Dieta...</option>
-            <option value="All">No filters</option>
             {diets.map(el => <option key={el.id} value={el.name}>{el.name}</option>)}
           </select>
         </div>

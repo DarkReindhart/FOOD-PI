@@ -7,14 +7,14 @@ export default function Card({ id, name, image, dietType, dishType }) {
         <NavLink className='link' to={`/recipeDetail/${id}`}>
         <div className='card'>
                 <img src={image} alt="not found" className="img" />
-                <h4 >{name}</h4>
+                <h4 className='wrap_word'>{name}</h4>
                 <div>
                 {
-                    dietType?.length ? <p>Diets: {dietType?.join(", ")}</p> :
+                    dietType?.length ? <p className='wrap_word'>Diets: {dietType?.join(", ")}</p> :
                     <p>No diets associated with this dish</p>
                 }
                 {
-                    dishType?.length ? <p>Dish Type: {dishType?.join(", ")}</p> :
+                    dishType?.length ? <p className='wrap_word'>Dish Type: {dishType?.join(", ")}</p> :
                     <p>No Dish type associated with this dish</p>
                 }
             </div>
