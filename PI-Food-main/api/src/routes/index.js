@@ -7,7 +7,7 @@ const { typesInfo, allInfo, idSearch } = require('../controllers')
 
 const router = Router();
 
-(async function type(){
+(async function type() {
     try {
         await typesInfo();
     } catch (error) {
@@ -137,12 +137,14 @@ router.post('/recipe', async (req, res, next) => {
                 }
             })
             if (created) {
-                let dietType = await Diet.findAll({
-                    where: {
-                        name: diet
-                    }
-                })
-                createRecipe.addDiets(dietType)
+                if (diet) {
+                    let dietType = await Diet.findAll({
+                        where: {
+                            name: diet
+                        }
+                    })
+                    createRecipe.addDiets(dietType)
+                }
                 return res.status(201).send('Recipe created')
             }
             else {
@@ -185,6 +187,78 @@ router.delete('/recipe/:idRecipe', async (req, res, next) => {
         next(error)
     }
 })
+
+// router.delete('/recipe/:idRecipe', (req, res, next) => {
+    
+//         const { idRecipe } = req.params
+//         Recipe.destroy({ where: { id: idRecipe } })
+//             .then(deletedRecipe => {
+//                 if (!deletedRecipe) return res.status(404).send('No recipe with the provided ID to delete')
+//                 else return res.send('Recipe deleted succesfully')
+//             })
+//             .catch(error => next(error))
+// })
+
+router.put('/modifyRecipe/:idRecipe', async (req, res, next) => {
+    let { name, summary, score, healthScore, steps, diet, image } = req.body
+    const { idRecipe } = req.params
+
+    try {
+        if (!name || !summary) {
+            return res.status(400).send('Name or Summary cant be changed to nothing')
+        }
+        else {
+            const modifiedRecipe = await Recipe.update({name, summary, score, healthScore, steps, diet, image},{where: { id: idRecipe }})
+            if (modifiedRecipe[0] !== 0) {
+                if(diet){
+                    let dietType = await Diet.findAll({
+                        where: {
+                            name: diet
+                        }
+                    })
+                    const recipeModified = await Recipe.findByPk(idRecipe)
+                    await recipeModified.setDiets(dietType)
+                }
+                return res.send('Recipe modified')
+            }
+            else {
+                return res.status(404).send('Recipe id not found')
+            }
+        }
+    } catch (error) {
+        next(error)
+    }
+})
+
+// router.put('/modifyRecipe/:idRecipe', (req, res, next) => {
+//     let { name, summary, score, healthScore, steps, diet, image } = req.body
+//     const { idRecipe } = req.params
+
+//     if (!name || !summary) {
+//         return res.status(400).send('Name or Summary cant be changed to nothing')
+//     }
+//     else {
+
+//         Recipe.update({ name, summary, score, healthScore, steps, diet, image }, { where: { id: idRecipe } })
+//             .then(modifiedRecipe => {
+//                 if (modifiedRecipe[0] !== 0) {
+//                     if (diet) {
+//                         Diet.findAll({ where: { name: diet } })
+//                             .then(dietType =>
+//                                 Recipe.findByPk(idRecipe)
+//                                     .then(recipeModified => recipeModified.setDiets(dietType))
+//                             )
+//                             .catch(error => next(error))
+//                     }
+//                     return res.send('Recipe modified')
+//                 }
+//                 else {
+//                     return res.status(404).send('Recipe id not found')
+//                 }
+//             })
+//             .catch(error => next(error))
+//     }
+// })
 
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);

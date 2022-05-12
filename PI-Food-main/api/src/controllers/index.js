@@ -9,14 +9,14 @@ let typesInfo = async () => {
         const dietType = apiInfo.data.results.map(el => el.diets)
         const uniqueDT = [...new Set(dietType.flat())]
         const allTypes = uniqueDT.concat(["ketogenic", "vegetarian", "low fodmap"])
-        allTypes.forEach(el => Diet.findOrCreate({
+        await Promise.all(allTypes.map(el => Diet.findOrCreate({
             where: {
                 name: el.toLowerCase()
             },
             order: [
                 ['id', 'DESC']
             ]
-        }))
+        })))
         return allTypes
     } catch (error) {
         throw new Error(error)
@@ -38,6 +38,7 @@ const apiInfo = async () => {
                 name: el.title,
                 image: el.image,
                 score: el.spoonacularScore,
+                healthScore: el.healthScore,
                 dietType: diets,
                 dishType: el.dishTypes.map(el => el),
             }
@@ -87,9 +88,19 @@ const dbInfo = async () => {
         })
         return created.map(el => {
             return {
-                ...el.dataValues,
-                dietType: el.diets?.map(el => el.name)
+                id: el.id,
+                name: el.name,
+                summary: el.summary,
+                score: el.score,
+                healthScore: el.healthScore,
+                steps: el.steps,
+                image: el.image,
+                dietType: el.diets?.map(el => el.name.toLowerCase())
             }
+            // return {
+            //     ...el.dataValues,
+            //     dietType: el.diets?.map(el => el.name)
+            // }
         })
     } catch (error) {
         throw new Error(error)
@@ -106,6 +117,11 @@ const allInfo = async () => {
         throw new Error(error)
     }
 }
+
+// const allInfo = () => {
+//   return apiInfo()
+//   .then((response) => response.concat(dbInfo().then((response) => response)))
+// }
 
 const idSearch = async (id) => {
     try {
