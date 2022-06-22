@@ -140,10 +140,10 @@ export function deleteRecipe(idRecipe){
                 confirmButtonColor: '#00A300'
             })
         } catch (error) {
-            if (error.response?.status === 404) {
+            if (error.response?.status) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'error.response.data',
+                    title: error.response.data,
                     confirmButtonColor: '#00A300'
                 })
             }

@@ -36,11 +36,6 @@ export default function RecipeDetail(props) {
     }).then((result) => {
       if (result.isConfirmed) {
         dispatch(deleteRecipe(props.match.params.id))
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success'
-        )
         history.push("/home")
       }
     })
