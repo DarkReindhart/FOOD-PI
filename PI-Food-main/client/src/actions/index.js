@@ -10,7 +10,9 @@ export const LOAD_RECIPES = 'LOAD_RECIPES'
 export const DELETE_RECIPE = 'DELETE_RECIPE'
 export const RESET_STATES = 'RESET_STATES'
 export const REMEMBER_SEARCH_FILTER = 'REMEMBER_SEARCH_FILTER'
-export const RESET_DETAIL = 'RESET_DETAIL' 
+export const RESET_DETAIL = 'RESET_DETAIL'
+
+const  URL  = process.env.REACT_APP_URL
 
 
 
@@ -21,7 +23,7 @@ export function resetDetail(){
 export function getRecipes() {
     return async function (dispatch) {
         try {
-            let recipes = await axios.get(`http://localhost:3001/recipes`)
+            let recipes = await axios.get(`${URL}recipes`)
             return dispatch({
                 type: GET_RECIPES,
                 payload: recipes.data
@@ -35,7 +37,7 @@ export function getRecipes() {
 export function getRecipeDetail(idRecipe) {
     return async function (dispatch) {
         try {
-            const recipeDetail = await axios.get(`http://localhost:3001/recipes/${idRecipe}`)
+            const recipeDetail = await axios.get(`${URL}recipes/${idRecipe}`)
             return dispatch({ type: GET_RECIPE_DETAIL, payload: { ...recipeDetail.data } })
         } catch (error) {
             console.log(error.message)
@@ -46,7 +48,7 @@ export function getRecipeDetail(idRecipe) {
 export function getDiets() {
     return async function (dispatch) {
         try {
-            const diets = await axios.get(`http://localhost:3001/types`)
+            const diets = await axios.get(`${URL}types`)
             return dispatch({ type: GET_DIETS, payload: diets.data })
         } catch (error) {
             console.log(error.message)
@@ -71,7 +73,7 @@ export function orderBy(value) {
 export function getRecipesByName(name) {
     return async function (dispatch) {
         try {
-            let recipes = await axios.get(`http://localhost:3001/recipes?name=${name}`)
+            let recipes = await axios.get(`${URL}recipes?name=${name}`)
             return dispatch({ type: GET_BY_NAME, payload: recipes.data })
         } catch (error) {
             if (error.response?.status === 404) {
@@ -96,7 +98,7 @@ export function getRecipesByName(name) {
 export function createRecipe(recipe) {
     return async function (dispatch) {
         try {
-            const newRecipe = await axios.post(`http://localhost:3001/recipe`, recipe)
+            const newRecipe = await axios.post(`${URL}recipe`, recipe)
             return Swal.fire({
                 icon: 'success',
                 title: newRecipe.data,
@@ -131,7 +133,7 @@ export function resetStates(){
 export function deleteRecipe(idRecipe){
     return async function(dispatch){
         try {
-            const deletedRecipe = await axios.delete(`http://localhost:3001/recipe/${idRecipe}`)
+            const deletedRecipe = await axios.delete(`${URL}recipe/${idRecipe}`)
             return Swal.fire({
                 icon: 'success',
                 title: deletedRecipe.data,
