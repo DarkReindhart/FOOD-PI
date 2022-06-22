@@ -1,17 +1,33 @@
 const { Router } = require('express');
 const { Diet, Recipe } = require('../db.js');
+require('dotenv').config();
+const { API_KEY_1 } = process.env;
 const regExUUID = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
-const { typesInfo, allInfo, idSearch } = require('../controllers')
+const { typesInfo, allInfo, idSearch, preloadApiInfo } = require('../controllers')
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 
 const router = Router();
 
+const changeApiKey = async (apiKey = API_KEY_1, i = 1) => {
+    try {
+        await typesInfo(apiKey);
+        await preloadApiInfo(apiKey);
+    } catch (error) {
+        if (error.message.includes("402")) {
+            console.log("API_KEYs vencidas: " + i)
+            i++
+            if (i > 22) { i = 1 }
+            changeApiKey(process.env[`API_KEY_${i}`], i)
+        }
+    }
+}
+
 (async function type() {
     try {
-        await typesInfo();
+        await changeApiKey()
     } catch (error) {
-        console.log('cambiar APIKEY, ', error.message)
+        console.log(error.message)
     }
 })()
 
@@ -189,7 +205,7 @@ router.delete('/recipe/:idRecipe', async (req, res, next) => {
 })
 
 // router.delete('/recipe/:idRecipe', (req, res, next) => {
-    
+
 //         const { idRecipe } = req.params
 //         Recipe.destroy({ where: { id: idRecipe } })
 //             .then(deletedRecipe => {
@@ -208,9 +224,10 @@ router.put('/modifyRecipe/:idRecipe', async (req, res, next) => {
             return res.status(400).send('Name or Summary cant be changed to nothing')
         }
         else {
-            const modifiedRecipe = await Recipe.update({name, summary, score, healthScore, steps, diet, image},{where: { id: idRecipe }})
+            const modifiedRecipe = await Recipe.update({ name, summary, score, healthScore, steps, diet, image }, { where: { id: idRecipe } })
+            console.log(modifiedRecipe)
             if (modifiedRecipe[0] !== 0) {
-                if(diet){
+                if (diet) {
                     let dietType = await Diet.findAll({
                         where: {
                             name: diet

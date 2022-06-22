@@ -1,3 +1,4 @@
+const Swal = require('sweetalert2')
 const axios = require('axios');
 export const GET_RECIPES = 'GET_RECIPES'
 export const GET_RECIPE_DETAIL = 'GET_RECIPE_DETAIL'
@@ -9,7 +10,13 @@ export const LOAD_RECIPES = 'LOAD_RECIPES'
 export const DELETE_RECIPE = 'DELETE_RECIPE'
 export const RESET_STATES = 'RESET_STATES'
 export const REMEMBER_SEARCH_FILTER = 'REMEMBER_SEARCH_FILTER'
+export const RESET_DETAIL = 'RESET_DETAIL' 
 
+
+
+export function resetDetail(){
+    return {type: RESET_DETAIL}
+}
 
 export function getRecipes() {
     return async function (dispatch) {
@@ -68,10 +75,19 @@ export function getRecipesByName(name) {
             return dispatch({ type: GET_BY_NAME, payload: recipes.data })
         } catch (error) {
             if (error.response?.status === 404) {
-                alert(error.response.data)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: error.response.data,
+                    confirmButtonColor: '#00A300'
+                })
             }
             else {
-                alert('Internal error')
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Internal error',
+                    confirmButtonColor: '#00A300'
+                })
             }
         }
     }
@@ -81,16 +97,18 @@ export function createRecipe(recipe) {
     return async function (dispatch) {
         try {
             const newRecipe = await axios.post(`http://localhost:3001/recipe`, recipe)
-            return alert(newRecipe.data)
+            return Swal.fire({
+                icon: 'success',
+                title: newRecipe.data,
+                confirmButtonColor: '#00A300' 
+            })
         } catch (error) {
-            if (error.response?.status === 500) {
-                alert(error.response.data)
-            }
-            else if (error.response?.status === 400) {
-                alert(error.response.data)
-            }
-            else if (error.response?.status === 302) {
-                alert(error.response.data)
+            if (error.response?.status) {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.response.data,
+                    confirmButtonColor: '#00A300' 
+                })
             }
         }
 
@@ -114,10 +132,18 @@ export function deleteRecipe(idRecipe){
     return async function(dispatch){
         try {
             const deletedRecipe = await axios.delete(`http://localhost:3001/recipe/${idRecipe}`)
-            return alert(deletedRecipe.data)
+            return Swal.fire({
+                icon: 'success',
+                title: deletedRecipe.data,
+                confirmButtonColor: '#00A300'
+            })
         } catch (error) {
             if (error.response?.status === 404) {
-                alert(error.response.data)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'error.response.data',
+                    confirmButtonColor: '#00A300'
+                })
             }
         }
     }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { rememberSearchFilter, filterDiets, getRecipesByName, orderBy, resetStates } from '../../actions'
+import { rememberSearchFilter, filterDiets, getRecipesByName, orderBy, resetStates, getRecipes } from '../../actions'
 import './SearchBar.css'
 
 export default function SearchBar() {
@@ -36,6 +36,7 @@ export default function SearchBar() {
   const handleSubmitClear = (e) => {
     e.preventDefault()
     dispatch(resetStates())
+    dispatch(getRecipes())
     setName("")
   }
 

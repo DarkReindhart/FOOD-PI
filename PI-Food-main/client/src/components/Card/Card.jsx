@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './Card.css'
 
-export default function Card({ id, name, image, dietType, dishType }) {
+export default function Card({ id, name, image, dietType, dishType, healthScore }) {
     return (
         <NavLink className='link' to={`/recipeDetail/${id}`}>
         <div className='card'>
@@ -14,9 +14,10 @@ export default function Card({ id, name, image, dietType, dishType }) {
                     <p>No diets associated with this dish</p>
                 }
                 {
-                    dishType?.length ? <p className='wrap_word'>Dish Type: {dishType?.join(", ")}</p> :
+                    dishType?  <p className='wrap_word'>Dish Type: {dishType}</p> :
                     <p>No Dish type associated with this dish</p>
                 }
+                <p>HealthScore: {healthScore}</p>
             </div>
         </div>
         </NavLink>

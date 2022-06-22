@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { deleteRecipe, getRecipeDetail } from '../../actions'
+import Swal from 'sweetalert2'
 import './RecipeDetail.css'
 const regExUUID = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
 
@@ -16,6 +17,7 @@ export default function RecipeDetail(props) {
     dispatch(getRecipeDetail(props.match.params.id))
   }, [dispatch, props.match.params.id])
 
+
   const handleShow = (e) => {
     e.preventDefault()
     setClick(!click)
@@ -23,10 +25,29 @@ export default function RecipeDetail(props) {
 
   const handleDelete = (e) => {
     e.preventDefault()
-    if(window.confirm('Are you sure you want to delete this recipe?')){
-      dispatch(deleteRecipe(props.match.params.id))
-      history.push("/home")
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#00A300',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteRecipe(props.match.params.id))
+        Swal.fire(
+          'Deleted!',
+          'Your file has been deleted.',
+          'success'
+        )
+        history.push("/home")
+      }
+    })
+    // if(window.confirm('Are you sure you want to delete this recipe?')){
+    //   dispatch(deleteRecipe(props.match.params.id))
+    //   history.push("/home")
+    // }
   }
 
 
@@ -41,7 +62,7 @@ export default function RecipeDetail(props) {
                 <img className='imagesize' src={recipeDetail.image} alt="not found" />
               </div>
               <div className='name'>
-              <p><b>Score</b>: {recipeDetail.score} </p>
+              {/* <p><b>Score</b>: {recipeDetail.score} </p> */}
               <p><b>HealthScore</b>: {recipeDetail.healthScore} </p>
               </div>
               <div>

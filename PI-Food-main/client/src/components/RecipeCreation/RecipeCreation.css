@@ -36,14 +36,12 @@
 
 .justify{
     display:flex;
-    justify-content: center;
     flex-wrap: wrap;
-    margin: 15px;
+    margin: 15px 0px 15px 100px;
 }
 
 .align_diet{
     width: 170px;
-    align-self: left;
     text-align: left;
 }
 

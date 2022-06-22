@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { filterDiets, getDiets, getRecipes, loadingRecipes, orderBy, resetStates } from '../../actions'
+import { filterDiets, getDiets, getRecipes, loadingRecipes, orderBy, resetDetail, resetStates } from '../../actions'
 import Card from '../Card/Card'
 import Pages from '../Pages/Pages'
 import './Home.css'
@@ -29,6 +29,10 @@ export default function Home() {
     dispatch(getDiets())
     return dispatch(loadingRecipes())
   }, [dispatch])
+
+  useEffect(() => {
+    dispatch(resetDetail())
+  })
 
   useEffect(() => {
     setActualPage(1)
@@ -70,7 +74,7 @@ export default function Home() {
       <div className='align'>
         {
           loading ? recipesShown.length ? recipesShown?.map(el =>
-            <Card key={el.id} id={el.id} name={el.name} score={el.score} image={el.image} dietType={el.dietType} dishType={el.dishType} />)
+            <Card key={el.id} healthScore = {el.healthScore} id={el.id} name={el.name} score={el.score} image={el.image} dietType={el.dietType} dishType={el.dishType} />)
             : <div className='messages'><b>No recipes found!</b></div>
             : <div className='messages'><b>Loading...</b></div>
         }
